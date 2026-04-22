@@ -3,6 +3,9 @@ import type { NextFunction, Request, Response } from "express";
 import { Post } from "../entity/Post";
 import { User } from "../entity/User";
 import { BadRequestError, NotFoundError } from "../helpers/apiError";
+import { validate } from "class-validator";
+import { IValidationError } from "../types/IValidationError";
+import { formatErrors } from "../helpers/formatErrors";
 
 export class PostController {
   private postRepository = AppDataSource.getRepository(Post);
@@ -28,6 +31,11 @@ export class PostController {
         throw new NotFoundError("Usuário não encontrado.");
       }
       const newPost = this.postRepository.create({ title, content, user });
+      const errors = await validate(newPost);
+      if (errors.length > 0) {
+        const formattedErrors = formatErrors(errors);
+        throw new BadRequestError("Falha de validação", formattedErrors);
+      }
       await this.postRepository.save(newPost);
       return res.status(201).json(newPost);
     } catch (error: unknown) {
