@@ -9,8 +9,8 @@ export class UserController {
   private userRepository = AppDataSource.getRepository(User);
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { firstName, lastName } = req.body;
-      const newUser = this.userRepository.create({ firstName, lastName });
+      const { firstName, lastName, phone } = req.body;
+      const newUser = this.userRepository.create({ firstName, lastName, phone });
       const errors = await validate(newUser);
       if (errors.length > 0) {
         const formattedErrors = formatErrors(errors);

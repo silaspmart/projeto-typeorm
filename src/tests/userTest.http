@@ -12,13 +12,13 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "firstName": "Marco Aurelio",
-  "lastName": "Hansen"
+  "firstName": "",
+  "lastName": "Lino"
 }
 
 ###
 
-DELETE http://localhost:3000/api/users/2
+DELETE http://localhost:3000/api/users/8
 
 ###
 
@@ -26,8 +26,8 @@ PATCH  http://localhost:3000/api/users/3
 Content-Type: application/json
 
 {
-  "firstName": "Marco Aurelio",
-  "lastName": "Hansen"
+  "firstName": "Gonzalo",
+  "lastName": "Plata"
 }
 
 ###
