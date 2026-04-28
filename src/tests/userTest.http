@@ -13,7 +13,8 @@ Content-Type: application/json
 
 {
   "firstName": "Marco Aurelio",
-  "lastName": "Hansen"
+  "lastName": "Hansen",
+  "phone": "(24) 99544-5421"
 }
 
 ###
