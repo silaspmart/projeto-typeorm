@@ -9,12 +9,17 @@ export class UserController {
   private userRepository = AppDataSource.getRepository(User);
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { firstName, lastName, phone } = req.body;
+      const { firstName, lastName, phone, email } = req.body;
       const newUser = this.userRepository.create({
         firstName,
         lastName,
+        email,
         phone,
       });
+      const exists = await this.userRepository.findOneBy({ email });
+      if (exists) {
+        throw new BadRequestError("Email fornecido já está em uso!");
+      }
       const errors = await validate(newUser);
       if (errors.length > 0) {
         const formattedErrors = formatErrors(errors);
@@ -30,7 +35,11 @@ export class UserController {
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      const { firstName, lastName } = req.body;
+      const { firstName, lastName, email, phone } = req.body;
+      const exists = await this.userRepository.findOneBy({ email });
+      if (exists) {
+        throw new BadRequestError("Email fornecido já está em uso!");
+      }
       if (isNaN(id)) {
         throw new BadRequestError("ID inválido");
       }
@@ -40,6 +49,13 @@ export class UserController {
       }
       user.firstName = firstName ?? user.firstName;
       user.lastName = lastName ?? user.lastName;
+      user.phone = phone ?? user.phone;
+      user.email = email ?? user.email;
+      const errors = await validate(user);
+      if (errors.length > 0) {
+        const formattedErrors = formatErrors(errors);
+        throw new BadRequestError("Falha de validação", formattedErrors);
+      }
       await this.userRepository.save(user);
       return res.json(user);
     } catch (error: unknown) {
