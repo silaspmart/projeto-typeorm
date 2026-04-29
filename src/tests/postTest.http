@@ -8,5 +8,16 @@ Content-Type: application/json
 }
 
 ###
-
 GET http://localhost:3000/api/posts
+
+###
+PATCH http://localhost:3000/api/posts/1
+Content-Type: application/json
+
+{
+  "title": "abc",
+  "content": "Novo conteúdo"
+}
+
+###
+DELETE http://localhost:3000/api/posts/1

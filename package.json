@@ -22,5 +22,13 @@
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.28"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcoahansen/projeto-typeorm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marcoahansen/projeto-typeorm/issues"
+  },
+  "homepage": "https://github.com/marcoahansen/projeto-typeorm#readme"
 }
