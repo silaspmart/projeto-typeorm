@@ -2,11 +2,23 @@ POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "title": "  teste      ",
-  "content": "     teste     ",
-  "userId": 1
+  "title": "teste",
+  "content": "teste teste teste",
+  "userId": 8
+}
+
+###
+PATCH  http://localhost:3000/api/posts/6
+Content-Type: application/json
+
+{
+  "title": "teste testando",
+  "userId": 9
 }
 
 ###
 
 GET http://localhost:3000/api/posts
+
+###
+DELETE  http://localhost:3000/api/posts/6
