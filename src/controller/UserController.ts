@@ -9,8 +9,19 @@ export class UserController {
   private userRepository = AppDataSource.getRepository(User);
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { firstName, lastName, phone } = req.body;
-      const newUser = this.userRepository.create({ firstName, lastName, phone });
+      const { firstName, lastName, phone, email } = req.body;
+      if (email) {
+        const existingUser = await this.userRepository.findOneBy({ email });
+        if (existingUser) {
+          throw new BadRequestError("E-mail já está em uso");
+        }
+      }
+      const newUser = this.userRepository.create({
+        firstName,
+        lastName,
+        phone,
+        email,
+      });
       const errors = await validate(newUser);
       if (errors.length > 0) {
         const formattedErrors = formatErrors(errors);
@@ -26,7 +37,7 @@ export class UserController {
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      const { firstName, lastName } = req.body;
+      const { firstName, lastName, email, phone } = req.body;
       if (isNaN(id)) {
         throw new BadRequestError("ID inválido");
       }
@@ -34,8 +45,22 @@ export class UserController {
       if (!user) {
         throw new NotFoundError("Usuário não encontrado");
       }
+      if (email) {
+        const existingUser = await this.userRepository.findOneBy({ email });
+
+        if (existingUser && existingUser.id !== id) {
+          throw new BadRequestError("E-mail já está em uso");
+        }
+      }
       user.firstName = firstName ?? user.firstName;
       user.lastName = lastName ?? user.lastName;
+      user.phone = phone ?? user.phone;
+      user.email = email ?? user.email;
+      const errors = await validate(user);
+      if (errors.length > 0) {
+        const formattedErrors = formatErrors(errors);
+        throw new BadRequestError("Falha de validação", formattedErrors);
+      }
       await this.userRepository.save(user);
       return res.json(user);
     } catch (error: unknown) {
@@ -64,6 +89,7 @@ export class UserController {
   listById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
+
       if (isNaN(id)) {
         throw new BadRequestError("ID inválido");
       }
@@ -76,9 +102,11 @@ export class UserController {
       next(error);
     }
   };
+
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
+
       if (isNaN(id)) {
         throw new BadRequestError("ID inválido");
       }

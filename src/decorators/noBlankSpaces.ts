@@ -6,6 +6,6 @@ export class NoBlankSpacesConstraint implements ValidatorConstraintInterface {
         return typeof value === "string" && value.trim().length > 0;
     }
     defaultMessage(args?: ValidationArguments): string {
-        return `O campo ${args?.property} não pode conster espaços em branco.`
+        return `O campo ${args?.property} não pode conter espaços em branco.`
     }
 }

@@ -12,8 +12,14 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
+<<<<<<< HEAD
   "firstName": "",
   "lastName": "Lino"
+=======
+  "firstName": "Marco Aurelio",
+  "lastName": "Hansen",
+  "phone": "(24) 99544-5421"
+>>>>>>> 92bb788f2bb1fdd989659cab499c6c2968001d59
 }
 
 ###
